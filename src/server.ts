@@ -1,5 +1,5 @@
 import express from "express";
-import { postRouter } from "./routers/post.js";
+import { postRouter } from "./transport/routers/post.js";
 
 const PORT = 5000;
 const HOST = "localhost";
