@@ -1,13 +1,20 @@
+
 import { Router } from "express";
+import type { PostHandlerContract } from "../handlers/posts.types.js";
 
-import { 
-    getPosts,
-    getPostId,
-    createPost
-} from "../handlers/post.js";
+export function createPostRoute(PostHandler: PostHandlerContract) {
+    const PostRouter = Router();
 
-export const postRouter = Router();
+    PostRouter.get("/", PostHandler.getPosts);
+    PostRouter.get("/:id", PostHandler.getPostById);
+    PostRouter.post("/", PostHandler.createPost);
 
-postRouter.get('/', getPosts);
-postRouter.get('/:id', getPostId);
-postRouter.post('/', createPost);
+    return PostRouter;
+}
+
+
+
+
+
+
+

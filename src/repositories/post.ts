@@ -1,6 +1,7 @@
 import type { Post } from "../domain/products/entity.js";
+import type { PostRepositoryContract } from "../domain/products/repository.js";
 
-export function createPostRepository() {
+export function createPostRepository(): PostRepositoryContract {
     const posts: Post[] = [
     {
         id: 1,
@@ -30,7 +31,7 @@ export function createPostRepository() {
 }
 
     function addPost(newPost: Post ) {
-        return new Promise((resolve, reject) => {
+        return new Promise<Post>((resolve, reject) => {
             setTimeout(() => {
                 posts.push(newPost)
                 resolve(newPost)    
