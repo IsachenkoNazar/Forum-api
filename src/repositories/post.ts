@@ -1,44 +1,31 @@
 import type { Post } from "../domain/products/entity.js";
 import type { PostRepositoryContract } from "../domain/products/repository.js";
+import type { CreatePostInput } from "../transport/handlers/posts.types.js";
 
-export function createPostRepository(): PostRepositoryContract {
-    const posts: Post[] = [
-    {
-        id: 1,
-        title: "nature",
-        content: "birds, trees and plants",
-        author: "Isachenko",
-        category: "nature",
-    },
-    {
-        id: 2,
-        title: "animals",
-        content: "variety of animals",
-        author: "Isachenko",
-        category: "animals",
-    }
-]
+type DataBase = typeof import("../prisma/db.js")["db"];
 
-    function getAllPosts(take?: number) {
-        if (!take) {
-            return posts
-        }
-    return posts.slice(0, take)
-}
-
-    function getPostById(id: number) {
-        return posts.find((post) => post.id == id)
-}
-
-    function addPost(newPost: Post ) {
-        return new Promise<Post>((resolve, reject) => {
-            setTimeout(() => {
-                posts.push(newPost)
-                resolve(newPost)    
-            }, 1000);
+export function createPostRepository(db: DataBase): PostRepositoryContract {
+    async function getAllPosts(take?: number) {
+        const query = db.orm.public.Post.orderBy((post) => {
+            return post.id.asc();
         });
+
+        if (!take) {
+            return query.all();
+        }
+
+        return query.limit(take).all();
     }
-    return {getAllPosts, getPostById, addPost}
+
+    async function addPost(post: CreatePostInput) {
+        return db.orm.public.Post.create(post);
+    }
+
+    async function getPostById(id: number) {
+        return await db.orm.public.Post.where({ id }).first();
+    }
+
+    return { getAllPosts, addPost, getPostById };
 }
 
 

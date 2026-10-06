@@ -1,24 +1,22 @@
 
 import type { PostResponse } from "../dto/responses.js";
-import type { CreatePostRequest } from "../dto/requests.js";
 import type { ErrorResponse } from "../dto/errors.js";
 import type { Request, Response } from "express";
 import type { Post } from "../../domain/products/entity.js";
 import type { PostHandlerContract } from "./posts.types.js";
 import type { PostRepositoryContract } from "../../domain/products/repository.js";
-import type { PostServiseContract } from "../../domain/products/service.js";
 
 
 export function createPosthandler(postRepository: PostRepositoryContract): PostHandlerContract{
 
 
-    function getPosts(
+    async function getPosts(
         req: Request,
         res: Response<Post[] | ErrorResponse>) {
         const { take } = req.query;
 
         if (!take) {
-            res.status(200).json(postRepository.getAllPosts());
+            res.status(200).json(await postRepository.getAllPosts());
             return
         }
 
@@ -31,11 +29,11 @@ export function createPosthandler(postRepository: PostRepositoryContract): PostH
             return
         }
 
-        const posts = postRepository.getAllPosts(takeNum);
+        const posts = await postRepository.getAllPosts(takeNum);
         return res.status(200).json(posts);
     }
 
-    function getPostById(
+    async function getPostById(
         req:Request,
         res: Response<Post | ErrorResponse>){
         const postId = Number(req.params.id);
@@ -46,7 +44,7 @@ export function createPosthandler(postRepository: PostRepositoryContract): PostH
             });
         }
 
-        const post = postRepository.getPostById(postId);
+        const post = await postRepository.getPostById(postId);
 
         if (!post) {
             return res.status(404).json({
@@ -76,7 +74,6 @@ export function createPosthandler(postRepository: PostRepositoryContract): PostH
 
         try {
             const newPost = await postRepository.addPost({
-                id: id,
                 title: title.trim(),
                 content: content.trim(),
                 category: category.trim(),
@@ -100,6 +97,6 @@ export function createPosthandler(postRepository: PostRepositoryContract): PostH
         }
     }
 
-    return { getPosts, getPostById, createPost };
+    return { getPosts, getPostById, createPost } as unknown as PostHandlerContract;
 }
 

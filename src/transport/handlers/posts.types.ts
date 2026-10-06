@@ -1,24 +1,16 @@
-import type { Request, Response } from "express";
-import type { PostResponse } from "../dto/responses.js";
-import type { CreatePostRequest } from "../dto/requests.js";
-import type { ErrorResponse } from "../dto/errors.js";
+export interface Post {
+    id: number;
+    title: string;
+    content: string;
+    author: string;
+    category: string
+};
 
+
+export type CreatePostInput = Omit<Post, "id">
 
 export interface PostHandlerContract{
-    getPosts: (
-        req: Request,
-        res: Response<PostResponse[] | ErrorResponse>
-    ) => void;
-
-    getPostById: (
-        req: Request,
-        res: Response<PostResponse | ErrorResponse>
-    ) => void;
-
-createPost: (
-    req: Request<{}, {}, CreatePostRequest>,
-    res: Response<PostResponse | ErrorResponse>
-) => void | Promise<void>;
+    getPosts: (take?: number) => Promise<Post[]>
+    getPostById: (id: number) => Promise<Post | null>
+    createPost: (post: CreatePostInput) => Promise<Post | null>
 }
-
-
