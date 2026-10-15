@@ -59,12 +59,12 @@ export function createPosthandler(postRepository: PostRepositoryContract): PostH
     async function createPost(
         req:Request,
         res:Response<PostResponse| ErrorResponse>) {
-        const { id, title, content, category, author } = req.body;
+        const { title, content, categoryId, author } = req.body;
 
         if (
             typeof title !== 'string' || !title.trim() ||
             typeof content !== 'string' || !content.trim() ||
-            typeof category !== 'string' || !category.trim()
+            !Number.isInteger(categoryId) || categoryId <= 0
         ) {
             res.status(422).json({
                 message: 'Invalid post data',
@@ -76,8 +76,8 @@ export function createPosthandler(postRepository: PostRepositoryContract): PostH
             const newPost = await postRepository.addPost({
                 title: title.trim(),
                 content: content.trim(),
-                category: category.trim(),
-                author: author
+                author,
+                categoryId,
             });
 
             if (!newPost) {
@@ -87,7 +87,7 @@ export function createPosthandler(postRepository: PostRepositoryContract): PostH
                 return;
             }
 
-            res.status(201).json(newPost as PostResponse);
+            res.status(201).json(newPost as unknown as PostResponse);
         } catch (error) {
             console.error(error);
 
@@ -97,6 +97,6 @@ export function createPosthandler(postRepository: PostRepositoryContract): PostH
         }
     }
 
-    return { getPosts, getPostById, createPost } as unknown as PostHandlerContract;
+    return { getPosts, getPostById, createPost } as PostHandlerContract
 }
 

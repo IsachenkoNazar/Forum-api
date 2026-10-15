@@ -1,16 +1,12 @@
-export interface Post {
-    id: number;
-    title: string;
-    content: string;
-    author: string;
-    category: string
-};
-
+import type { Category } from "../../domain/category/entity";
+import type { Request, Response } from 'express';
+import type { Post } from "../../domain/products/entity";
 
 export type CreatePostInput = Omit<Post, "id">
 
-export interface PostHandlerContract{
-    getPosts: (take?: number) => Promise<Post[]>
-    getPostById: (id: number) => Promise<Post | null>
-    createPost: (post: CreatePostInput) => Promise<Post | null>
+
+export interface PostHandlerContract {
+  getPosts: (req: Request, res: Response) => Promise<any>;
+  getPostById: (req: Request, res: Response) => Promise<any>;
+  createPost: (req: Request, res: Response) => Promise<any>;
 }

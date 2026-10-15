@@ -7,6 +7,7 @@ export function createPostRoute(PostHandler: PostHandlerContract) {
 
     PostRouter.get("/", PostHandler.getPosts);
     PostRouter.get("/:id", PostHandler.getPostById);
+    PostRouter.get("/title:title", PostHandler.getPosts);
     PostRouter.post("/", PostHandler.createPost);
 
     return PostRouter;

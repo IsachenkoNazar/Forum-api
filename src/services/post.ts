@@ -15,12 +15,12 @@ function getPostId(id: number) {
 }
 
 async function createPost(data: CreatePostInput) {
-    let { title, content,  category, author } = data;
+    let { title, content,  categoryId, author } = data;
 
     let post = {
         title: title,
         content: content,
-        category: category,
+        categoryId: categoryId,
         author: author
     };
 
