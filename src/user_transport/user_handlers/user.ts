@@ -24,8 +24,8 @@ export function createUserHandler(
             }
 
             catch(error) {
-                if (error instanceof Error && error.message === "USER ALREADY EXIST") {
-                    res.status(409).json({ message: "User already exist" });
+                if (error instanceof Error && error.message === "Email is already used!") {
+                    res.status(409).json({ message: "Email is already used" });
                     return;
                 }
                 
@@ -48,13 +48,14 @@ export function createUserHandler(
 
                 })
             
-                res.status(200).json(result.user)
+                res.status(200).json(result)
             }
             catch(error){
-                if (error instanceof Error && error.message === "PASSWORD_IS_WRONG") {
-                res.status(401).json({ message: "Password is wrong" });
-                return
-            }
+                if (error instanceof Error && error.message === "Invalid credentials") {
+                    res.status(401).json({ message: "Invalid password" });
+                    return
+                }
+            console.error(error)
             res.status(500).json({message: 'Internal server error'})
         }
     }

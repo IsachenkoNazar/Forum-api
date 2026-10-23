@@ -53,5 +53,6 @@ app.listen(PORT, HOST, () => {
     console.log(`Server is running on http://${HOST}:${PORT}/posts`);
     console.log(`Server is running on http://${HOST}:${PORT}/category`)
     console.log(`Server is running on http://${HOST}:${PORT}/users/register`)
-    console.log(`Server is running on http://${HOST}:${PORT}/users/login`)
+        console.log(`Server is running on http://${HOST}:${PORT}/users/login`)
+
 });

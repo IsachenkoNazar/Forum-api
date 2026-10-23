@@ -32,7 +32,7 @@ export function createUserService(
 
             const user = await repository.getUserByEmail(email.trim())
 
-            if (!user || await PasswordHasher.verifyPassword(user.passwordHash, password)){
+            if (!user || !await PasswordHasher.verifyPassword(user.passwordHash, password)){
                 throw new Error("Invalid credentials")
             }
         

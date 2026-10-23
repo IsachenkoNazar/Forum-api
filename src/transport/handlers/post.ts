@@ -59,7 +59,7 @@ export function createPosthandler(postRepository: PostRepositoryContract): PostH
     async function createPost(
         req:Request,
         res:Response<PostResponse| ErrorResponse>) {
-        const { title, content, categoryId, author } = req.body;
+        const { title, content,userId, categoryId, author } = req.body;
 
         if (
             typeof title !== 'string' || !title.trim() ||
