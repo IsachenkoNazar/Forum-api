@@ -5,7 +5,8 @@ model Post {
   id         Int      @id @default(autoincrement())
   title      String   @unique
   content    String
-  author     String
+  userId  Int
+  author  User @relation(fields: [userId], references: [id])
   categoryId Int
   category   Category @relation(fields: [categoryId], references: [id])
 }
@@ -14,4 +15,11 @@ model Category {
   id    Int    @id @default(autoincrement())
   title String @unique
   posts Post[] 
+}
+
+model User {
+  id  Int @id @default(autoincrement())
+  email  String @unique
+  passwordHash String
+  posts Post[]
 }

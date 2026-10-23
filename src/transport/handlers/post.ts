@@ -76,7 +76,7 @@ export function createPosthandler(postRepository: PostRepositoryContract): PostH
             const newPost = await postRepository.addPost({
                 title: title.trim(),
                 content: content.trim(),
-                author,
+                userId,
                 categoryId,
             });
 
