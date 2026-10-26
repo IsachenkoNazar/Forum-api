@@ -1,8 +1,8 @@
-import type { Post } from "../types/posts";
+import type { PostWithCategory } from "../types/posts";
 
 
 interface PostCardProps{
-    post: Post
+    post: PostWithCategory
 }
 
 export function PostCard(props: PostCardProps){
@@ -18,8 +18,8 @@ return (
     <div className="post">
         <p>{title}</p>
         <p>{content}</p>
-        <p>{author}</p>
-        <p>{category}</p>
+        <p>{author.email}</p>
+        <p>{category.title}</p>
         <button className="button">see more</button>
     </div>
 

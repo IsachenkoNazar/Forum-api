@@ -1,9 +1,9 @@
-import type { Post } from "../types/posts";
+import type { PostWithCategory } from "../types/posts";
 import { PostCard } from "./postCard";
 
 
 interface PostListProps{
-    posts: Post[]
+    posts: PostWithCategory[]
 };
 
 export function PostList(props: PostListProps){
