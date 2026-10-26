@@ -1,4 +1,7 @@
 import express from "express";
+import { db } from "./prisma/db.js";
+import cors from "cors"
+
 import { createPostRepository } from "./repositories/post.js";
 import { createPostService } from "./services/post.js";
 import { createPosthandler } from "./transport/handlers/post.js";
@@ -9,7 +12,6 @@ import { CreateCategoryService } from "./category_service/category.js";
 import { createCategorHandler } from "./category_handler/category.js";
 import { createCategoryRepository} from "./category_repository/category.js";
 
-import { db } from "./prisma/db.js";
 import { createUserRepositoryContract } from "./user_repository/user.js";
 import { createUserService } from "./user_service/user.js";
 import { hashPassword, verifyPassword } from "./lib/password.js";
@@ -44,7 +46,9 @@ const userService = createUserService(userRepository,
 const userHandler = createUserHandler(userService)
 const userRouter = createUserRouter(userHandler)
 
-
+app.use(cors ({
+    origin: "http://localhost:5173"
+}))
 app.use("/posts", postRoute);
 app.use("/category", categoryRoute)
 app.use("/users", userRouter)
