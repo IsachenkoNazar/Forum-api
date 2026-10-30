@@ -1,6 +1,7 @@
 import express from "express";
 import { db } from "./prisma/db.js";
 import cors from "cors"
+import cookieParser from "cookie-parser"
 
 import { createPostRepository } from "./repositories/post.js";
 import { createPostService } from "./services/post.js";
@@ -15,9 +16,10 @@ import { createCategoryRepository} from "./category_repository/category.js";
 import { createUserRepositoryContract } from "./user_repository/user.js";
 import { createUserService } from "./user_service/user.js";
 import { hashPassword, verifyPassword } from "./lib/password.js";
-import { signAccessToken } from "./lib/jwt.js";
+import { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken } from "./lib/jwt.js";
 import { createUserHandler } from "./user_transport/user_handlers/user.js";
 import { createUserRouter } from "./user_transport/user_routers/user.js";
+import { createRequierAuth } from "./user_transport/middlewares/require_path.js";
 
 const PORT = 5000;
 const HOST = "localhost";
@@ -41,11 +43,18 @@ const userRepository = createUserRepositoryContract(db)
 const userService = createUserService(userRepository,
     {hashPassword: hashPassword,
         verifyPassword: verifyPassword
-    }, {signAccessToken: signAccessToken }
+    }, {signAccessToken: signAccessToken, signRefreshToken: signRefreshToken},
+    {
+        verifyAccessToken: verifyAccessToken,
+        verifyRefreshToken: verifyRefreshToken
+    }
 )
 const userHandler = createUserHandler(userService)
-const userRouter = createUserRouter(userHandler)
+const requireAuth = createRequierAuth(verifyAccessToken)
+const userRouter = createUserRouter(userHandler, requireAuth)
 
+
+app.use(cookieParser())
 app.use(cors ({
     origin: "http://localhost:5173"
 }))

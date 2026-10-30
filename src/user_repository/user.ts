@@ -22,6 +22,10 @@ export function createUserRepositoryContract(db: DataBase): userRepositoryContra
     
         async getUserByEmail(email){
             return db.orm.public.User.where({email}).first()
+        },
+    
+        async getUserById(id){
+            return db.orm.public.User.where({id}).first()
         }
     }
 }
