@@ -1,5 +1,5 @@
 
-import type { userRepositoryContract } from "../domain/user/repository";
+import type { userRepositoryContract } from "../../domain/user/repository";
 import type { PasswordHasherContract, TokenSignerContract, UserServiceContract, TokenVerifierContract } from "./user.types";
 
 

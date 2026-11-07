@@ -1,10 +1,10 @@
 import { isStructuredError } from "@prisma/orm-postgres/utils";
-import type { PostRepositoryContract } from "../domain/products/repository.js";
-import type { CreatePostInput, PostHandlerContract } from "../transport/handlers/posts.types.js";
-import type { PostWithCategory } from "../domain/products/entity.js";
-import type { PostWithUser } from "../domain/products/entity.js";
+import type { PostRepositoryContract } from "../../domain/post/repository.js";
+import type { CreatePostInput} from "../../domain/post/entity.js";
+import type { PostWithCategory } from "../../domain/post/entity.js";
+import type { PostWithUser } from "../../domain/post/entity.js";
 
-type DataBase = typeof import("../prisma/db.js")["db"];
+type DataBase = typeof import("../../prisma/db.js")["db"];
 
 export function createPostRepository(db: DataBase): PostRepositoryContract {
     async function getAllPosts(take?: number, categoryId?: number, userId?: number) {

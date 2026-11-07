@@ -1,5 +1,5 @@
 import { Router } from "express";
-import type { CategoryHandlerContract } from "../category_handler/category.types";
+import type { CategoryHandlerContract } from "../handlers/category_handler/category.types";
 
 export function createCategoryRoute(CategoryHandler: CategoryHandlerContract){
     const CategoryRouter = Router();

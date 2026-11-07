@@ -1,6 +1,7 @@
 
-import type { PostRepositoryContract } from "../domain/products/repository.js";
-import type { CreatePostInput, PostHandlerContract} from "../transport/handlers/posts.types.js"
+import type { PostRepositoryContract } from "../../domain/post/repository.js";
+import type { CreatePostInput} from "../../domain/post/entity.js"
+import type { PostHandlerContract } from "../../transport/handlers/post/posts.types.js";
 
 
 
@@ -15,13 +16,13 @@ function getPostId(id: number) {
 }
 
 async function createPost(data: CreatePostInput) {
-    let { title, content,  categoryId, author } = data;
+    let { title, content,  categoryId, userId } = data;
 
     let post = {
         title: title,
         content: content,
         categoryId: categoryId,
-        author: author
+        userId: userId
     };
 
         return await postRepository.addPost(post)

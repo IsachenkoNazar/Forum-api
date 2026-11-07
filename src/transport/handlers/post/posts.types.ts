@@ -1,6 +1,6 @@
-import type { Category } from "../../domain/category/entity";
+
 import type { Request, Response } from 'express';
-import type { Post } from "../../domain/products/entity";
+import type { Post } from "../../../domain/post/entity"
 
 export type CreatePostInput = Omit<Post, "id">
 

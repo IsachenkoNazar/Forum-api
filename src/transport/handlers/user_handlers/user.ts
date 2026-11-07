@@ -1,5 +1,5 @@
 import "dotenv/config"
-import type { UserServiceContract, UserTokens } from "../../user_service/user.types"
+import type { UserServiceContract, UserTokens } from "../../../services/user_service/user.types"
 import type { UserHandlerContract } from "./user.types"
 import type { Response } from "express"
 

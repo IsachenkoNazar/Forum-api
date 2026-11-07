@@ -1,4 +1,4 @@
-import type {Post} from "../products/entity.js"
+import type {Post} from "./entity.js"
 
 export interface PostServiseContract{
     getPosts: (take: number, ) => Post[];

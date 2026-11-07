@@ -1,5 +1,5 @@
 import type { Response, Request } from "express";
-import type { UserCredendialsBody } from "../dto/request";
+import type { UserCredendialsBody } from "../../dto/user/request";
 
 export interface UserHandlerContract{
     register: (

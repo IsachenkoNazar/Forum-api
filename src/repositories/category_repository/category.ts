@@ -1,9 +1,9 @@
 import { isStructuredError } from "@prisma/orm-postgres/utils";
-import type { CategoryRepositoryContract } from "../domain/category/repository";
-import type { CreateCategoryInput } from "../domain/category/entity";
+import type { CategoryRepositoryContract } from "../../domain/category/repository";
+import type { CreateCategoryInput } from "../../domain/category/entity";
 import type { field } from "@prisma/orm-postgres/contract-builder";
 
-type DataBase = typeof import("../prisma/db.js")["db"];
+type DataBase = typeof import("../../prisma/db.js")["db"];
 
 export function createCategoryRepository(db: DataBase): CategoryRepositoryContract {
     async function getAllCategory() {

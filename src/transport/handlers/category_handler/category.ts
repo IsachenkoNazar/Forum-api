@@ -1,9 +1,9 @@
-import type { CategoryResponse } from "../category_dto/responses";
-import type { ErrorResponse } from "../category_dto/errors";
+import type { CategoryResponse } from "../../dto/category_dto/responses";
+import type { ErrorResponse } from "../../dto/category_dto/errors";
 import { response, type Request, type Response } from "express";
-import type { Category } from "../domain/category/entity";
+import type { Category } from "../../../domain/category/entity";
 import type { CategoryHandlerContract } from "./category.types";
-import type { CategoryRepositoryContract } from "../domain/category/repository";
+import type { CategoryRepositoryContract } from "../../../domain/category/repository";
 
 
 export function createCategorHandler(categoryRepository: CategoryRepositoryContract): CategoryHandlerContract{

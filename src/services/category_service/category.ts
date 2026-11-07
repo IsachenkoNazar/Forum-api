@@ -1,5 +1,5 @@
-import type { CategoryRepositoryContract } from "../domain/category/repository";
-import type { CreateCategoryInput } from "../domain/category/entity";
+import type { CategoryRepositoryContract } from "../../domain/category/repository";
+import type { CreateCategoryInput } from "../../domain/category/entity";
 
 
 export function CreateCategoryService(categoryRepository: CategoryRepositoryContract){

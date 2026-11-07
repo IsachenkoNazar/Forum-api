@@ -1,5 +1,5 @@
-import type { CreatePostInput } from "../../transport/handlers/posts.types.js"
-import type {Post, PostWithCategory} from "../products/entity.js"
+import type { CreatePostInput } from "../post/entity"
+import type {Post, PostWithCategory} from "./entity.js"
 
 export interface PostRepositoryContract{
     getAllPosts: (take?: number, categoryId?: number, userId?: number) => Promise<PostWithCategory[]>

@@ -1,10 +1,10 @@
 
-import type { PostResponse } from "../dto/responses.js";
-import type { ErrorResponse } from "../dto/errors.js";
+import type { PostResponse } from "../../dto/post/responses.js";
+import type { ErrorResponse } from "../../dto/post/errors.js";
 import type { Request, Response } from "express";
-import type { Post } from "../../domain/products/entity.js";
-import type { PostHandlerContract } from "./posts.types.js";
-import type { PostRepositoryContract } from "../../domain/products/repository.js";
+import type { Post } from "../../../domain/post/entity.js";
+import type { PostHandlerContract } from "../post/posts.types.js"
+import type { PostRepositoryContract } from "../../../domain/post/repository.js";
 
 
 export function createPosthandler(postRepository: PostRepositoryContract): PostHandlerContract{

@@ -1,5 +1,4 @@
-import type { PublicUser } from "../domain/user/entity"
-import { hashPassword } from "../lib/password"
+import type { PublicUser } from "../../domain/user/entity"
 
 export interface UserInput{
     email: string,

@@ -3,23 +3,23 @@ import { db } from "./prisma/db.js";
 import cors from "cors"
 import cookieParser from "cookie-parser"
 
-import { createPostRepository } from "./repositories/post.js";
-import { createPostService } from "./services/post.js";
-import { createPosthandler } from "./transport/handlers/post.js";
+import { createPostRepository } from "./repositories/post_repository/post.js";
+import { createPostService } from "./services/post_service/post.js";
+import { createPosthandler } from "./transport/handlers/post/post.js";
 import { createPostRoute } from "./transport/routers/post.js";
 
-import { createCategoryRoute } from "./category_routers/category.js";
-import { CreateCategoryService } from "./category_service/category.js";
-import { createCategorHandler } from "./category_handler/category.js";
-import { createCategoryRepository} from "./category_repository/category.js";
+import { createCategoryRoute } from "./transport/routers/category.js";
+import { CreateCategoryService } from "./services/category_service/category.js";
+import { createCategorHandler } from "./transport/handlers/category_handler/category.js";
+import { createCategoryRepository} from "./repositories/category_repository/category.js";
 
-import { createUserRepositoryContract } from "./user_repository/user.js";
-import { createUserService } from "./user_service/user.js";
+import { createUserRepositoryContract } from "./repositories/user_repository/user.js";
+import { createUserService } from "./services/user_service/user.js";
 import { hashPassword, verifyPassword } from "./lib/password.js";
 import { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken } from "./lib/jwt.js";
-import { createUserHandler } from "./user_transport/user_handlers/user.js";
-import { createUserRouter } from "./user_transport/user_routers/user.js";
-import { createRequierAuth } from "./user_transport/middlewares/require_path.js";
+import { createUserHandler } from "./transport/handlers/user_handlers/user";
+import { createUserRouter } from "./transport/routers/user.js";
+import { createRequierAuth } from "./transport/middlewares/require_path.js";
 
 const PORT = 5000;
 const HOST = "localhost";

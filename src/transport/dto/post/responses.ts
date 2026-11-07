@@ -1,4 +1,4 @@
-import type { Category } from "../../domain/category/entity";
+import type { Category } from "../../../domain/category/entity";
 
 export interface PostResponse{
     id: number;
