@@ -84,7 +84,56 @@ main {
   background-color: blue;
 }
 
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
+}
+
+.form .register-form{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  width: 30vw;
+  height: 10vh;
+
+}
+
+.form .register-form .input-email{
+  width: 12vw;
+  margin: 1.5vh;
+
+  background-color: transparent;
+  border: 2px solid black;
+  border-radius: 15px;
+}
+
+.form .register-form .input-password{
+  width: 12vw;
+
+  background-color: transparent;
+  border: 2px solid black;
+  border-radius: 15px;
+
+  margin-bottom: 2.5vh;
+}
+
+.form .register-form .button{
+  width: 6;
+
+  background-color: transparent;
+  border: 2px solid black;
+  border-radius: 15px;
+
+}
+
+.form .register-form .button:hover{
+  background-color: blue;
+}
 
 
 
