@@ -2,6 +2,7 @@ import "dotenv/config"
 import type { UserServiceContract, UserTokens } from "../../../services/user_service/user.types"
 import type { UserHandlerContract } from "./user.types"
 import type { Response } from "express"
+import { error } from "node:console"
 
 
 function setUserTokens(
@@ -89,6 +90,7 @@ export function createUserHandler(
                 res.status(200).json({message: "tokens update"})
             }
             catch(error){
+                console.log(error)
                 res.status(500).json({message: "Internal server error"})
             }
             return
@@ -103,6 +105,41 @@ export function createUserHandler(
             }
         
             catch(error){
+                res.status(500).json({message: "Internal server error"})
+            }
+        },
+
+        async logout(req, res){
+            
+            try{
+                const refreshToken = req.cookies?.refreshToken
+
+                await service.logout(
+                    typeof refreshToken === "string"
+                        ? refreshToken
+                        : undefined
+                )
+
+                res.clearCookie("accesssToken", {
+                    httpOnly: true,
+                    sameSite: "lax",
+                    secure: process.env.NODE_ENV === "production",
+                    path: "/"
+                })
+
+                res.clearCookie("refreshToken", {
+                    httpOnly: true,
+                    sameSite: "lax",
+                    secure: process.env.NODE_ENV === "production",
+                    maxAge: 7 * 24 * 60 * 60 * 1000,
+                    path: "/"
+                })
+                res.status(200).json({message: "Logged out"})
+
+            }catch{
+            if(error instanceof Error && error.message === "OLD_HASH"){
+                res.status(401).json({message: "OLD_HASH"})
+            }
                 res.status(500).json({message: "Internal server error"})
             }
         }

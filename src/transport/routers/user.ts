@@ -9,9 +9,8 @@ export function createUserRouter(userHandler: UserHandlerContract, requireAuth: 
     userRouter.post('/register', userHandler.register)
     userRouter.post('/login', userHandler.login)
     userRouter.post('/refresh', userHandler.refresh)
-
     userRouter.get("/me", requireAuth, userHandler.me)
-
+    userRouter.post("/logout", userHandler.logout)
 
     return userRouter
 
