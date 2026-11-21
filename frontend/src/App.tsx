@@ -2,11 +2,16 @@ import "./App.css"
 // import { useGetPostsQuery } from "./api/baseApi"
 import { Header } from "./components/Header"
 import { RegisterForm } from "./components/RegisterForm"
+import { LoginFrom } from "./components/LoginFrom"
+import { useGetMeQuery } from "./api/baseApi"
 
 
 
 
 function App(){
+  const {data: user} = useGetMeQuery()
+
+  
   // const {data, isError, isLoading} = useGetPostsQuery()
 
   // if(!data){
@@ -27,8 +32,16 @@ function App(){
 
   return(
     <main className="main">
-        <Header title="Registration" content="create youre own account"/>
-        <RegisterForm/>
+        <Header title="Registration & Authorization" content="create and enter your own account"/>
+
+        {user? <p>You authorized as {user.email} </p>
+
+        : <div className="form">
+          <RegisterForm/>
+          <LoginFrom/>
+        </div>
+        }
+
         {/* <PostList posts = {data}/> */}
     </main>
   )

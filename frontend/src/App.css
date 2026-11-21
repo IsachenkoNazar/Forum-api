@@ -64,10 +64,6 @@ main {
 
 
 }
-
-
-
-
 .posts .button{
   display: flex;
   flex-direction: column;
@@ -89,6 +85,11 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  width: 60vw;
+  height: 20vh;
+
+  padding: 7vh
 
 }
 
@@ -135,6 +136,44 @@ main {
   background-color: blue;
 }
 
+
+.form .login-form{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+
+  width: 30vw;
+  height: 10vh;
+
+  padding-top: 10vh;
+}
+
+.form .login-form .input-email{
+  width: 12vw;
+  margin-top: 1vh;
+
+  background-color: transparent;
+  border: 2px solid black;
+  border-radius: 15px;
+}
+
+.form .login-form .input-password{
+  width: 12vw;
+
+  background-color: transparent;
+  border: 2px solid black;
+  border-radius: 15px;
+}
+
+.form .login-form .button-login{
+  width: 6;
+
+  background-color: transparent;
+  border: 2px solid black;
+  border-radius: 15px;
+
+}
 
 
 
