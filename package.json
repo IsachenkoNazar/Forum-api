@@ -29,6 +29,7 @@
     "typescript": "^7.0.2"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.6.8",
     "@prisma/cli-engine": "^0.6.2",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",

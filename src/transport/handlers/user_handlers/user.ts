@@ -3,13 +3,14 @@ import type { UserServiceContract, UserTokens } from "../../../services/user_ser
 import type { UserHandlerContract } from "./user.types"
 import type { Response } from "express"
 import { error } from "node:console"
+import { COOKIES } from "../../../shared/constants/cookies"
 
 
 function setUserTokens(
     res: Response,
     tokens: UserTokens
 ){
-    res.cookie("accessToken", tokens.accessToken, {
+    res.cookie(COOKIES.ACCESS_TOKEN, tokens.accessToken, {
         httpOnly: true,
         sameSite: "lax",
         secure: process.env.NODE_ENV === "production",
@@ -17,7 +18,7 @@ function setUserTokens(
         path: "/"
 
     })
-    res.cookie("refreshToken", tokens.refreshToken, {
+    res.cookie(COOKIES.REFRESH_TOKEN, tokens.refreshToken, {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
@@ -120,14 +121,14 @@ export function createUserHandler(
                         : undefined
                 )
 
-                res.clearCookie("accesssToken", {
+                res.clearCookie(COOKIES.ACCESS_TOKEN, {
                     httpOnly: true,
                     sameSite: "lax",
                     secure: process.env.NODE_ENV === "production",
                     path: "/"
                 })
 
-                res.clearCookie("refreshToken", {
+                res.clearCookie(COOKIES.REFRESH_TOKEN, {
                     httpOnly: true,
                     sameSite: "lax",
                     secure: process.env.NODE_ENV === "production",

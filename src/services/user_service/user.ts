@@ -1,18 +1,8 @@
 
-import type { RefreshSessionRepositoryContract } from "../../domain/refresh-session/repository";
-import type { userRepositoryContract } from "../../domain/user/repository";
-import { signRefreshToken } from "../../lib/jwt";
-import { CreateRefreshSessionRepository } from "../../repositories/refresh-sessions/refresh-sessions";
-import type { PasswordHasherContract, TokenSignerContract, UserServiceContract, TokenVerifierContract, RefreshTokenHasherContract } from "./user.types";
+import type { PasswordHasherContract,UserServiceContract,UserServiceDependencies,} from "./user.types";
 
-export function createUserService(
-    repository: userRepositoryContract,
-    passwordHasher: PasswordHasherContract,
-    tokenSigner: TokenSignerContract,
-    tokenVerifier: TokenVerifierContract,
-    refreshTokenHasher: RefreshTokenHasherContract,
-    refreshSessionRepository: RefreshSessionRepositoryContract
-): UserServiceContract{
+export function createUserService(dependencies: UserServiceDependencies): UserServiceContract{
+    const {repository, refreshSessionRepository, passwordHasher, tokenHasher} = dependencies
     return{
         async register(data){
             const {email, password} = data
@@ -41,11 +31,11 @@ export function createUserService(
                 throw new Error("Invalid credentials")
             }
 
-            const refreshToken = tokenSigner.signRefreshToken(user.id)
+            const refreshToken = tokenHasher.signRefreshToken(user.id)
 
             await refreshSessionRepository.create({
                 userId: user.id,
-                tokenHash: refreshTokenHasher.hashRefreshToken(refreshToken),
+                tokenHash: tokenHasher.hashRefreshToken(refreshToken),
                 expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
             })
         
@@ -54,14 +44,14 @@ export function createUserService(
                     id: user.id,
                     email: user.email
                 },
-                accessToken: tokenSigner.signAccessToken(user.id),
+                accessToken: tokenHasher.signAccessToken(user.id),
                 refreshToken
             }
         },
     
         async refresh(refreshToken){
-            const userId = tokenVerifier.verifyRefreshToken(refreshToken)
-            const oldHash = await refreshTokenHasher.hashRefreshToken(refreshToken)
+            const userId = tokenHasher.verifyRefreshToken(refreshToken)
+            const oldHash = await tokenHasher.hashRefreshToken(refreshToken)
             const session = await refreshSessionRepository.getByHash(oldHash)
         
 
@@ -77,14 +67,14 @@ export function createUserService(
             if(!user){
                 throw new Error("INVALID_REFRESH_TOKEN")
             }
-                const newRefreshToken = tokenSigner.signRefreshToken(user.id)
-                const isChanged = await refreshSessionRepository.update(oldHash, refreshTokenHasher.hashRefreshToken(newRefreshToken),
+                const newRefreshToken = tokenHasher.signRefreshToken(user.id)
+                const isChanged = await refreshSessionRepository.update(oldHash, tokenHasher.hashRefreshToken(newRefreshToken),
                     new Date (Date.now() + 7 * 24 * 60 * 60 * 1000))
                     if(!isChanged){
                         throw new Error("INVALID REFRESH TOKEN")
             }
             return{
-                accessToken: tokenSigner.signAccessToken(user.id),
+                accessToken: tokenHasher.signAccessToken(user.id),
                 refreshToken: newRefreshToken
 
             }
@@ -104,7 +94,7 @@ export function createUserService(
         },
         async logout(refreshToken) {
             if (!refreshToken) return;
-                await refreshSessionRepository.delete(refreshTokenHasher.hashRefreshToken(refreshToken))
+                await refreshSessionRepository.delete(tokenHasher.hashRefreshToken(refreshToken))
         }
     }
 }

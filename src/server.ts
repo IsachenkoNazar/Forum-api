@@ -3,6 +3,9 @@ import { db } from "./prisma/db.js";
 import cors from "cors"
 import cookieParser from "cookie-parser"
 
+import {createPasswordHasher} from "./lib/password.js"
+import { createTokenHasher } from "./lib/jwt.js";
+
 import { createPostRepository } from "./repositories/post_repository/post.js";
 import { createPostService } from "./services/post_service/post.js";
 import { createPosthandler } from "./transport/handlers/post/post.js";
@@ -15,12 +18,12 @@ import { createCategoryRepository} from "./repositories/category_repository/cate
 
 import { createUserRepositoryContract } from "./repositories/user_repository/user.js";
 import { createUserService } from "./services/user_service/user.js";
-import { hashPassword, verifyPassword } from "./lib/password.js";
-import { hashRefreshToken, signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken } from "./lib/jwt.js";
 import { createUserHandler } from "./transport/handlers/user_handlers/user";
 import { createUserRouter } from "./transport/routers/user.js";
 import { createRequierAuth } from "./transport/middlewares/require_path.js";
 import { CreateRefreshSessionRepository } from "./repositories/refresh-sessions/refresh-sessions.js";
+import { ROUTS } from "./shared/constants/routers.js";
+import { config } from "./config.js";
 
 const PORT = 5000;
 const HOST = "localhost";
@@ -42,23 +45,20 @@ const categoryRoute = createCategoryRoute(categoryHandler)
 
 
 const userRepository = createUserRepositoryContract(db)
-const RefreshSessionRepository = CreateRefreshSessionRepository(db)
-const userService = createUserService(
-    userRepository, 
-    {hashPassword: hashPassword,
-        verifyPassword: verifyPassword
-    }, {signAccessToken: signAccessToken, signRefreshToken: signRefreshToken},
-    {
-        verifyAccessToken: verifyAccessToken,
-        verifyRefreshToken: verifyRefreshToken
-    },
-    {
-        hashRefreshToken: hashRefreshToken
-    },
-    RefreshSessionRepository
+const refreshSessionRepository = CreateRefreshSessionRepository(db)
+
+const passwordHasher = createPasswordHasher(config.passwordPepperSecret);
+const tokenHasher = createTokenHasher(config.accessTokenSecret, config.refreshTokenSecret);
+
+
+const userService = createUserService({
+    repository: userRepository,
+    refreshSessionRepository,
+    passwordHasher,
+    tokenHasher}
 )
 const userHandler = createUserHandler(userService)
-const requireAuth = createRequierAuth(verifyAccessToken)
+const requireAuth = createRequierAuth(tokenHasher.verifyAccessToken)
 const userRouter = createUserRouter(userHandler, requireAuth)
 
 app.use(express.json());
@@ -67,9 +67,9 @@ app.use(cors ({
     origin: "http://localhost:5173",
     credentials: true
 }))
-app.use("/posts", postRoute);
-app.use("/category", categoryRoute)
-app.use("/users", userRouter)
+app.use(ROUTS.POSTS, postRoute);
+app.use(ROUTS.CATEGORY, categoryRoute)
+app.use(ROUTS.USERS, userRouter)
 
 app.listen(PORT, HOST, () => {
     console.log(`Server is running on http://${HOST}:${PORT}/posts`);

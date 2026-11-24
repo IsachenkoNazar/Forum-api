@@ -1,4 +1,6 @@
+import type { RefreshSessionRepositoryContract } from "../../domain/refresh-session/repository"
 import type { PublicUser } from "../../domain/user/entity"
+import type { userRepositoryContract } from "../../domain/user/repository"
 
 export interface UserInput{
     email: string,
@@ -20,6 +22,16 @@ export interface TokenVerifierContract{
     verifyRefreshToken: (token: string) => number
 }
 
+export interface TokenServiceContract {
+	signAccessToken: (userId: number) => string;
+	signRefreshToken: (userId: number) => string;
+
+	verifyAccessToken: (token: string) => number;
+	verifyRefreshToken: (token: string) => number;
+
+	hashRefreshToken: (hash: string) => string;
+};
+
 
 export interface RefreshTokenHasherContract{
     hashRefreshToken: (hash: string) => string
@@ -31,6 +43,15 @@ export interface UserTokens{
 }
 
 
+export interface UserServiceDependencies{
+    repository: userRepositoryContract,
+    refreshSessionRepository: RefreshSessionRepositoryContract,
+    passwordHasher: PasswordHasherContract,
+    tokenHasher: TokenServiceContract
+}
+
+
+
 export interface UserServiceContract {
     register: (data: UserInput) => Promise<PublicUser>
     login: (data: UserInput) => Promise<{user: PublicUser} & UserTokens>
@@ -38,3 +59,4 @@ export interface UserServiceContract {
     me: (id: number) => Promise<PublicUser>
     logout: (refreshToken: string | undefined) => Promise<void>
 }
+
