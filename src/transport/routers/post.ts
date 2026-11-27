@@ -6,7 +6,7 @@ export function createPostRoute(PostHandler: PostHandlerContract) {
     const PostRouter = Router();
 
     PostRouter.get("/", PostHandler.getPosts);
-    PostRouter.get("/:id", PostHandler.getPostById);
+    PostRouter.get("/:id", PostHandler.getPostId);
     PostRouter.get("/title:title", PostHandler.getPosts);
     PostRouter.post("/", PostHandler.createPost);
 

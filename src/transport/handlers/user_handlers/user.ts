@@ -4,28 +4,9 @@ import type { UserHandlerContract } from "./user.types"
 import type { Response } from "express"
 import { error } from "node:console"
 import { COOKIES } from "../../../shared/constants/cookies"
+import { clearUserTokens, readAccessToken, readRefreshToken, setUserTokens } from "../../cookies/user"
 
 
-function setUserTokens(
-    res: Response,
-    tokens: UserTokens
-){
-    res.cookie(COOKIES.ACCESS_TOKEN, tokens.accessToken, {
-        httpOnly: true,
-        sameSite: "lax",
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 15 * 60 * 1000,
-        path: "/"
-
-    })
-    res.cookie(COOKIES.REFRESH_TOKEN, tokens.refreshToken, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-    path: "/"
-    }) 
-}
 export function createUserHandler(
     service: UserServiceContract
 ): UserHandlerContract{
@@ -111,32 +92,16 @@ export function createUserHandler(
         },
 
         async logout(req, res){
-            
             try{
-                const refreshToken = req.cookies?.refreshToken
 
-                await service.logout(
-                    typeof refreshToken === "string"
-                        ? refreshToken
-                        : undefined
-                )
+            const refreshToken = readRefreshToken
 
-                res.clearCookie(COOKIES.ACCESS_TOKEN, {
-                    httpOnly: true,
-                    sameSite: "lax",
-                    secure: process.env.NODE_ENV === "production",
-                    path: "/"
-                })
-
-                res.clearCookie(COOKIES.REFRESH_TOKEN, {
-                    httpOnly: true,
-                    sameSite: "lax",
-                    secure: process.env.NODE_ENV === "production",
-                    maxAge: 7 * 24 * 60 * 60 * 1000,
-                    path: "/"
-                })
-                res.status(200).json({message: "Logged out"})
-
+            await service.logout(
+                typeof refreshToken ==="string" ? refreshToken : undefined,
+            )
+            clearUserTokens(res)
+            res.status(200).json({message: "Logged out"})
+    
             }catch{
             if(error instanceof Error && error.message === "OLD_HASH"){
                 res.status(401).json({message: "OLD_HASH"})
@@ -144,4 +109,7 @@ export function createUserHandler(
                 res.status(500).json({message: "Internal server error"})
             }
         }
-}}
+    }
+            }
+        
+

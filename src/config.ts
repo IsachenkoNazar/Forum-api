@@ -24,10 +24,23 @@ function optionalInt(name: string, fallback: number){
     return value
 }
 
-export const config = {
-    databaseUrlSecret: required("DATABASE_URL"),
-    passwordPepperSecret: Buffer.from(required("PASSWORD_PEPPER"), "hex"),
-    accessTokenSecret: required("JWT_ACCESS_SECRET"),
-    refreshTokenSecret: required("JWT_REFRESH_SECRET"),
-    serverPortSecret: optionalInt("SERVER_PORT", 8000)
+export function createConfig(): Config{
+    return{
+        databaseUrlSecret: required("DATABASE_URL"),
+        passwordPepperSecret: Buffer.from(required("PASSWORD_PEPPER"), "hex"),
+        accessTokenSecret: required("JWT_ACCESS_SECRET"),
+        refreshTokenSecret: required("JWT_REFRESH_SECRET"),
+        corsOrigin: required("CORS_ORIGIN"),
+        serverPortSecret: optionalInt("SERVER_PORT", 8000)
+    }
+
+}
+
+export interface Config {
+	databaseUrlSecret: string,
+	passwordPepperSecret: Buffer,
+	accessTokenSecret: string,
+	refreshTokenSecret: string,
+	corsOrigin: string,
+	serverPortSecret: number,
 }

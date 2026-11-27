@@ -7,6 +7,6 @@ export type CreatePostInput = Omit<Post, "id">
 
 export interface PostHandlerContract {
   getPosts: (req: Request, res: Response) => Promise<any>;
-  getPostById: (req: Request, res: Response) => Promise<any>;
+  getPostId: (req: Request, res: Response) => Promise<any>;
   createPost: (req: Request, res: Response) => Promise<any>;
 }
